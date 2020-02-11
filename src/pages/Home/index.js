@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ActionsProducts from '../../store/modules/products/actions';
 import { ProductList } from './styles';
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.common);
+  const { products } = useSelector(state => state.products);
+  console.tron.log(products);
+  console.tron.log(loading);
+  useEffect(() => {
+    console.tron.log('entrou');
+    dispatch(ActionsProducts.requestProducts());
+    }, []); //eslint-disable-line
   return (
     <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-shox-nz-masculino/05/D12-9660-205/D12-9660-205_detalhe2.jpg?ims=326x"
-          alt="shoes"
-        />
-        <strong>Tenis FODA</strong>
-        <span>R$129,90</span>
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt="shoes" />
+          <strong>{product.title}</strong>
+          <span>{product.priceFormattted}</span>
+          <button type="button">
+            <div>
+              <MdAddShoppingCart size={16} color="#fff" /> 3
+            </div>
+            <span>ADICIONAR AO CARRINHO</span>
+          </button>
+        </li>
+      ))}
     </ProductList>
   );
 }
