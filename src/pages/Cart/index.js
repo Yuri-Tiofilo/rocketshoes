@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
@@ -8,62 +8,69 @@ import {
 import { Container, ProductTable, Total } from './styles';
 
 export default function Cart() {
+  const [cardSize, setCardSize] = useState(0);
+  const { cart } = useSelector(state => state.cart);
+  useEffect(() => {
+    setCardSize(cart.length);
+  }, [cart]);
   return (
-    <Container>
-      <ProductTable>
-        <thead>
-          <tr>
-            <th />
-            <th>PRODUTO</th>
-            <th>QTD</th>
-            <th>SUBTOTAL</th>
-            <th />
-          </tr>
-        </thead>
+    <>
+      {cart.length === 0 ? null : (
+        <Container>
+          <ProductTable>
+            <thead>
+              <tr>
+                <th />
+                <th>PRODUTO</th>
+                <th>QTD</th>
+                <th>SUBTOTAL</th>
+                <th />
+              </tr>
+            </thead>
+            {cart.map(itens => (
+              <tbody>
+                <tr>
+                  <td>
+                    <img src={itens.image} alt="shoesCart" />
+                  </td>
+                  <td>
+                    <strong>{itens.title}</strong>
+                    <span>{itens.priceFormattted}</span>
+                  </td>
+                  <td>
+                    <div>
+                      <button type="button">
+                        <MdRemoveCircleOutline size={20} color="#7159c1" />
+                      </button>
+                      <input type="number" readOnly value={itens.amount} />
+                      <button type="button">
+                        <MdAddCircleOutline size={20} color="#7159c1" />
+                      </button>
+                    </div>
+                  </td>
 
-        <tbody>
-          <tr>
-            <td>
-              <img
-                src="https://static.netshoes.com.br/produtos/tenis-nike-shox-nz-masculino/05/D12-9660-205/D12-9660-205_detalhe2.jpg?ims=326x"
-                alt="shoesCart"
-              />
-            </td>
-            <td>
-              <strong>Tenis Foda</strong>
-              <span>R$129,90</span>
-            </td>
-            <td>
-              <div>
-                <button type="button">
-                  <MdRemoveCircleOutline size={20} color="#7159c1" />
-                </button>
-                <input type="number" readOnly value={1} />
-                <button type="button">
-                  <MdAddCircleOutline size={20} color="#7159c1" />
-                </button>
-              </div>
-            </td>
+                  <td>
+                    <strong>R$ 258,80</strong>
+                  </td>
+                  <td>
+                    <button type="button">
+                      <MdDelete size={20} color="#7159c1" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </ProductTable>
 
-            <td>
-              <strong>R$ 258,80</strong>
-            </td>
-            <td>
-              <button type="button">
-                <MdDelete size={20} color="#7159c1" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </ProductTable>
-
-      <footer>
-        <button type="button">Finalizar pedido</button>
-        <Total>
-          <span>TOTAL:</span>
-          <strong>R$1229,00</strong>
-        </Total>
-      </footer>
-    </Container>
+          <footer>
+            <button type="button">Finalizar pedido</button>
+            <Total>
+              <span>TOTAL:</span>
+              <strong>R$1229,00</strong>
+            </Total>
+          </footer>
+        </Container>
+      )}
+    </>
   );
 }

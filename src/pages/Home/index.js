@@ -10,14 +10,14 @@ export default function Home() {
   const { loading } = useSelector(state => state.common);
   const { products } = useSelector(state => state.products);
   const { cart } = useSelector(state => state.cart);
-  console.tron.log(cart);
 
   useEffect(() => {
     dispatch(ActionsProducts.requestProducts());
   }, []); //eslint-disable-line
   function addToCart(product) {
-    dispatch(ActionsCart.requestAddProduct(product));
+    dispatch(ActionsCart.requestAddProduct([...cart, { product, amount: 1 }]));
   }
+  console.tron.log(cart);
   return (
     <ProductList>
       {products.map(product => (
